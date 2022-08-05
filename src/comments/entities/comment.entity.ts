@@ -1,5 +1,6 @@
-import { Column, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
 
+@Entity()
 export class Comment {
     
     // id
@@ -19,7 +20,7 @@ export class Comment {
     commenter_ip_address: string;
 
     // created_at
-    @Column({ type: 'timestamp', default: () => 'UTC_TIMESTAMP' })
+    @Column({ type: 'timestamp', default: new Date() })
     created_at:Date
    
 }

@@ -16,8 +16,8 @@ export class CommentsService {
   async create(createCommentDto: CreateCommentDto):Promise<Comment> {
     try {
       const makeComment = new Comment();
-      for (const key in CreateCommentDto) {
-        makeComment[key] = CreateCommentDto[key];
+      for (const key in createCommentDto) {
+        makeComment[key] = createCommentDto[key];
         
     }
     return this.CommentRepository.save(makeComment);
@@ -29,9 +29,9 @@ export class CommentsService {
   }
 }
 
-  findAll() {
-    return `This action returns all comments`;
-  }
+  // findAll() {
+  //   return `This action returns all comments`;
+  // }
 
   async commentFromBook(book_id: number, frequency?: boolean): Promise<[Comment[], number]> {
     try {

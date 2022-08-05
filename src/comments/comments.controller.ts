@@ -17,7 +17,7 @@ import {Request, Response} from 'express';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @Post('postbook/:id')
+  @Post('postBookComment/:id')
   async create(
     @Body() createCommentDto: CreateCommentDto,
     @Res() res: Response,
@@ -35,12 +35,12 @@ export class CommentsController {
   //   // return this.commentsService.create(createCommentDto);
   // }
 
-  @Get()
-  findAll() {
-    return this.commentsService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.commentsService.findAll();
+  // }
 
-  @Get('fetchBook/:id')
+  @Get('fetchBookComment/:id')
   async findById(
     @Param('id') id: number,
     @Res() res: Response

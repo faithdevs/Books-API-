@@ -5,7 +5,7 @@ export default {
   TYPEORM_TYPE: Joi.string().default('mysql'),
   TYPEORM_HOST: Joi.string(),
   TYPEORM_USERNAME: Joi.string(),
-  TYPEORM_PASSWORD: Joi.string(),
+  TYPEORM_PASSWORD: Joi.string().optional(),
   TYPEORM_DATABASE: Joi.string().default('core'),
   TYPEORM_PORT: Joi.number().default(3306),
   TYPEORM_LOGGING: Joi.string().default('false'),

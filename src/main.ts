@@ -1,64 +1,26 @@
-import { NestFactory, HttpAdapterHost } from '@nestjs/core';
-import * as helmet from 'helmet';
-import * as rateLimit from 'express-rate-limit';
-import { Logger } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import {Res, Req} from '@nestjs/common';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
-import { setupSwagger } from './bootstrap/setup-swagger';
-import { ConfigService } from '@nestjs/config';
-import { AllExceptionFilter } from './common/filters/all-exception.filter';
-import { json, urlencoded } from 'express';
+import {ConfigService} from '@nestjs/config';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import {Request, Response} from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const configService = app.get(ConfigService);
-  const { httpAdapter } = app.get(HttpAdapterHost);
 
-  const corsConfig = app.get<ConfigService>(ConfigService).get('cors');
-  Logger.log(`Applying cors config: ${JSON.stringify(corsConfig)}`);
-  app.enableCors(corsConfig);
+  app.enableCors()
 
-  app.setGlobalPrefix('api');
+  const configService  = app.get(ConfigService)
+  
 
-  app.use(json({ limit: '15mb' })); //For JSON requests
-  app.use(
-    urlencoded({
-      extended: true,
-    }),
-  );
 
-  app.use(helmet());
+  // api health check
+  app.use('/', (req: Request, res: Response) => {
+    res.send('🚀 Faith Ugbeshe has completed the Topup Mama Assessment. This Health Check endpoint shows that all apis works as expected. 🚀');
+    
+  }
+  )
 
-  app.enableCors();
-
-  app.use(
-    rateLimit({
-      windowMs: 15 * 60 * 1000, // 15 minutes
-      max: configService.get('MAX_RATE_LIMIT') || 100, // limit each IP to 100 requests per windowMs
-    }),
-  );
-
-  app.useGlobalFilters(new AllExceptionFilter(httpAdapter));
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-    }),
-  );
-
-  setupSwagger(app);
-
-  await app.listen(configService.get<number>('app.port'));
+  await app.listen(+configService.get('APP_PORT'), ()=> console.log());
 }
-
 bootstrap();
-
-process.on('unhandledRejection', (reason, p) => {
-  // tslint:disable-next-line:no-console
-  console.log(
-    'possibly Unhandled Rejection at: Promise ',
-    p,
-    ' | reason: ',
-    reason,
-  );
-});

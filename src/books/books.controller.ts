@@ -22,7 +22,7 @@ export class BooksController {
     return this.booksService.create(createBookDto);
   }
 
-  @Get('books')
+  @Get()
   async findAll(
     @Res() res: Response
   ){
